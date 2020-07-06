@@ -29,6 +29,9 @@ module.exports = {
     // CREATE POST
     async createPost(_, { body }, context) {
       const user = auth(context);
+      if (args.body.trim() === '') {
+        throw new Error('Please enter and Share your thoughts')
+      }
       // Create new Post
       const newPost = new Post({
         body,
