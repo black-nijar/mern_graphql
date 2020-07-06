@@ -82,19 +82,40 @@ module.exports = {
     },
 
     // DELETE COMMENT
-    async deleteComment(_, { postId, commentId }, context){
+    async deleteComment(_, { postId, commentId }, context) {
       const { username } = auth(context);
 
-      const post  = await Post.findById(postId);
+      const post = await Post.findById(postId);
 
       if (post) {
-        const commentIndex = post.comments.findIndex(comm => comm.id === commentId);
+        const commentIndex = post.comments.findIndex(
+          comm => comm.id === commentId
+        );
 
-        if (post.comments[commentIndex].username === username){
+        if (post.comments[commentIndex].username === username) {
           post.comments.splice(commentIndex, 1);
           await post.save();
           return post;
-        } else throw new AuthenticationError('Action not allowed')
+        } else throw new AuthenticationError('Action not allowed');
+      } else throw new UserInputError('Post not found');
+    },
+
+    // ADD LIKE & UNLIKE
+    async likePost(_, { postId }, context) {
+      const { username } = auth(context);
+
+      const post = await Post.findById(postId);
+      if (post) {
+        // unlike if liked
+        if (post.likes.find(like => like.username === username)) {
+          post.likes = post.likes.filter(like => like.username !== username);
+         
+        } else {
+          // add like
+          post.likes.push({ username, createdAt: new Date().toISOString() });
+        }
+        await post.save();
+        return post;
       } else throw new UserInputError('Post not found')
     }
   }
