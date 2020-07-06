@@ -9,7 +9,8 @@ const Post = require('./models/Post');
 // Server
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: ({req}) => ({req})
 });
 
 // Connect DB
