@@ -1,6 +1,6 @@
 const Post = require('../../models/Post');
 const auth = require('../../utils/auth');
-const { AuthenticationError } = require('apollo-server');
+const { AuthenticationError, UserInputError } = require('apollo-server');
 
 module.exports = {
   Query: {
@@ -26,6 +26,7 @@ module.exports = {
     }
   },
   Mutation: {
+    // CREATE POST
     async createPost(_, { body }, context) {
       const user = auth(context);
       // Create new Post
@@ -39,19 +40,45 @@ module.exports = {
       const post = await newPost.save();
       return post;
     },
+
+    // DELETE POST
     async deletePost(_, { postId }, context) {
       const user = auth(context);
       try {
         const post = await Post.findById(postId);
         if (user.username === post.username) {
           await post.deleteOne();
-          return 'Post deleted successfully'
+          return 'Post deleted successfully';
         } else {
-          throw new AuthenticationError('Action not allowed')
+          throw new AuthenticationError('Action not allowed');
         }
       } catch (error) {
-        throw new Error(error)
+        throw new Error(error);
       }
+    },
+
+    // ADD COMMENT
+    createComment: async (_, { postId, body }, context) => {
+      const { username } = auth(context);
+      if (body.trim() === '') {
+        throw new UserInputError('Empty comment', {
+          errors: {
+            body: 'Comment body must not be emty'
+          }
+        });
+      }
+
+      // Find post
+      const post = await Post.findById(postId);
+      if (post) {
+        post.comments.unshift({
+          body,
+          username,
+          createdAt: new Date().toISOString()
+        });
+        await post.save();
+        return post;
+      } else throw new UserInputError('Post not found');
     }
   }
 };
