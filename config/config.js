@@ -1,3 +1,4 @@
+
 module.exports = {
-  MONGODB: ``
+  MONGODB: mongoURI
 }
