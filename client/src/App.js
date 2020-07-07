@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import NavBar from './components/NavBar';
 import { Container } from 'semantic-ui-react';
-
+import './App.css'
 function App() {
   return (
     <BrowserRouter>
