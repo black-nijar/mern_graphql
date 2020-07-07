@@ -25,7 +25,7 @@ const Register = (props) => {
     variables: values
   });
 
-  const registerUser = () => {
+  function registerUser() {
     addUser();
   }
 
