@@ -17,6 +17,7 @@ const Login = props => {
     password: ''
   });
 
+  // MUTATION
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, result) {
       context.login(result.data.login)
@@ -28,6 +29,7 @@ const Login = props => {
     variables: values
   });
 
+  // LOGIN
   function loginUserCallback() {
     loginUser();
   }

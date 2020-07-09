@@ -11,7 +11,8 @@ const DeleteButton = ({ postId, commentId, callback }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
-
+   
+  // MUTATION
   const [deletePostOrMutation] = useMutation(mutation, {
     update(proxy) {
       setIsOpenModal(false);

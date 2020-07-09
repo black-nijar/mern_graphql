@@ -10,15 +10,16 @@ const PostForm = () => {
   const { values, onChange, onSubmit } = useForm(createPostCallback, {
     body: ''
   });
-
+ 
+  // MUTATION
   const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
-    // variables: values,
+
     // update(proxy, result) {
     //   const data = proxy.readQuery({
     //     query: FETCH_POSTS_QUERY
     //   });
-    //   data.getPosts = [result.data.createPost, ...data.getPosts];
-    //   proxy.writeQuery({ query: FETCH_POSTS_QUERY, data });
+    //  // data.getPosts = [result.data.createPost, ...data.getPosts];
+    //   proxy.writeQuery({ query: FETCH_POSTS_QUERY, data: { getPosts: result.data.createPost, ...data.getPosts} });
     //   values.body = '';
     // },
     onError: err => {
@@ -35,7 +36,7 @@ const PostForm = () => {
   return (
     <Fragment>
       <Form onSubmit={onSubmit}>
-        <h2>Create a post:</h2>
+        <h2>Share your thoughts:</h2>
         <Form.Field>
           <Form.Input
             placeholder='Hi World!'
@@ -43,9 +44,10 @@ const PostForm = () => {
             onChange={onChange}
             value={values.body}
             error={error ? true : false}
+            
           />
           <Button type='submit' color='teal'>
-            Submit
+            Post
           </Button>
         </Form.Field>
       </Form>

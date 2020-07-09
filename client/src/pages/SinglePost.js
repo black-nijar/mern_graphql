@@ -25,12 +25,14 @@ const SinglePost = props => {
   const commentInputRef = useRef(null);
 
   const postId = props.match.params.postId;
+  
   const { data: { getPost } = {} } = useQuery(FETCH_POST_QUERY, {
     variables: {
       postId
     }
   });
 
+  // MUTATION
   const [submitComment] = useMutation(SUBMIT_COMMENT_MUTATION, {
     update() {
       setComment('');
