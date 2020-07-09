@@ -1,8 +1,11 @@
 import React, { useState, Fragment } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
-import { Button, Icon, Confirm } from 'semantic-ui-react';
-import { FETCH_POSTS_QUERY } from '../util/graphql';
+import { Button, Icon, Confirm, Popup } from 'semantic-ui-react';
+import {
+  FETCH_POSTS_QUERY,
+  DELETE_POST_MUTATION,
+  DELETE_COMMENT_MUTATION
+} from '../util/graphql';
 
 const DeleteButton = ({ postId, commentId, callback }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -27,14 +30,19 @@ const DeleteButton = ({ postId, commentId, callback }) => {
   });
   return (
     <Fragment>
-      <Button
-        as='div'
-        color='red'
-        onClick={() => setIsOpenModal(true)}
-        floated='right'
-      >
-        <Icon name='trash' style={{ margin: 0 }} />
-      </Button>
+      <Popup
+        content={commentId ? 'Delete comment' : 'Delete post'}
+        trigger={
+          <Button
+            as='div'
+            color='red'
+            onClick={() => setIsOpenModal(true)}
+            floated='right'
+          >
+            <Icon name='trash' style={{ margin: 0 }} />
+          </Button>
+        }
+      />
       <Confirm
         open={isOpenModal}
         onCancel={() => setIsOpenModal(false)}
@@ -44,23 +52,4 @@ const DeleteButton = ({ postId, commentId, callback }) => {
   );
 };
 
-const DELETE_POST_MUTATION = gql`
-  mutation deletePost($postId: ID!) {
-    deletePost(postId: $postId)
-  }
-`;
-const DELETE_COMMENT_MUTATION = gql`
-  mutation deleteComment($postId: ID!, $commentId: ID!) {
-    deleteComment(postId: $postId, commentId: $commentId) {
-      id
-      comments {
-        id
-        username
-        createdAt
-        body
-      }
-      commentCount
-    }
-  }
-`;
 export default DeleteButton;
