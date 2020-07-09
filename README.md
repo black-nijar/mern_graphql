@@ -8,3 +8,6 @@ npm install & npm run serve
 `run frontend
 cd client
 npm install & npm start
+
+`
+const mongoUri = `Add_your_mongoUri`
